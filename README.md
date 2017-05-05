@@ -12,13 +12,15 @@ If you would like to view munin's graphs and output via HTTP, you will need an H
 
 ## Role Variables
 
-Available variables are listed below, along with default values (see `defaults/main.yml`):
+By default Ansible configures the provisioned server as an agent/node with basic configuration and setting `munin_master_ip_addr` is required in this case. Otherwise, to install and configure a Munin master server (Data gatherer and grapher) you just need to set `munin_node_type` to `master`.
 
-    munin_dbdir: /var/lib/munin
-    munin_htmldir: /var/www/html/munin
-    munin_logdir: /var/log/munin
-    munin_rundir: /var/run/munin
-    munin_includedir: /etc/munin/conf.d
+The other available variables are listed below, along with default values (see `defaults/main.yml`):
+
+    munin_db_dir: /var/lib/munin
+    munin_html_dir: /var/www/html/munin
+    munin_log_dir: /var/log/munin
+    munin_run_dir: /var/run/munin
+    munin_include_dir: /etc/munin/conf.d
 
 Some default locations for Munin-generated files, configurations, logs, etc.
 
@@ -28,7 +30,7 @@ Some default locations for Munin-generated files, configurations, logs, etc.
 
 See the official Munin documentation for [munin.conf](http://munin.readthedocs.org/en/latest/reference/munin.conf.html) for more information on these and other optional directives.
 
-    munin_cron_job: present
+    munin_cronjob: present
 
 Determines whether the munin cron job (which runs every 5 minutes) should be active. By setting this to `absent`, you can leave munin installed and configured on your server but effectively disable it. This allows quick enabling or disabling for munin monitoring.
 

@@ -1,1 +1,17 @@
+[munin-master]
 ansible-vm
+
+[munin-master:vars]
+munin_node_type=master
+
+[munin-nodes]
+ansible-vm
+ansible-vm
+
+[munin-nodes:vars]
+munin_node_type=agent
+munin_master_ip_addr=192.168.33.10
+
+[monitoring:children]
+munin-master
+munin-nodes

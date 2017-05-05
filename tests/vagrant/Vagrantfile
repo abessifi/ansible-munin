@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.galaxy_role_file = 'requirements.yml'
       ansible.playbook = 'site.yml'
       ansible.inventory_path = 'inventory'
-      ansible.limit = 'ansible-vm'
+      ansible.limit = 'monitoring'
       ansible.verbose = 'v'
     end
   end

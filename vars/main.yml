@@ -1,0 +1,8 @@
+---
+
+munin_depends_packages:
+  - python-passlib
+
+munin_required_packages: "{{ ['munin-node'] if munin_node_type == 'agent' else ['munin'] }}"
+
+munin_install_packages: "{{ munin_depends_packages + munin_required_packages }}"

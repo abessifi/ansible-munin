@@ -1,0 +1,85 @@
+---
+
+#
+# Munin master configuration
+#
+
+- name: Master | Copy Munin Master configurations
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - src: munin.conf.j2
+      dest: /etc/munin/munin.conf
+    - src: hosts.conf.j2
+      dest: "{{ munin_conf_d_directory }}/hosts.conf"
+  when: munin_node_type in ['master', 'master-agent']
+
+- name: Master | Create munin user via htpasswd
+  htpasswd:
+    create: yes
+    name: "{{ munin_admin_user }}"
+    password: "{{ munin_admin_password }}"
+    path: /etc/munin/munin-htpasswd
+    state: present
+  when: munin_node_type in ['master', 'master-agent']
+
+- name: Master | Enable munin cronjob
+  template:
+    src: "munin-cronjob.j2"
+    dest: "/etc/cron.d/munin"
+    owner: root
+    group: root
+    mode: 0644
+  when: munin_node_type in ['master', 'master-agent'] and munin_activate_cronjob|bool
+
+- name: Master | Disable the munin cronjob
+  file:
+    path: /etc/cron.d/munin
+    state: absent
+  when: munin_node_type in ['master', 'master-agent'] and not munin_activate_cronjob|bool
+
+#
+# Munin node configuration
+#
+
+- name: Node | Create log directory
+  file:
+    path: "{{ munin_node_log_dir }}"
+    state: directory
+    owner: root
+    group: munin
+    mode: 0775
+  when: munin_node_type in ['agent', 'master-agent']
+
+- name: Node | Create run directory
+  file:
+    path: "{{ munin_node_run_dir }}"
+    state: directory
+    owner: munin
+    group: munin
+    mode: 0775
+  when: munin_node_type in ['agent', 'master-agent']
+
+- name: Node | Copy Munin configurations
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - src: munin-node.conf.j2
+      dest: /etc/munin/munin-node.conf
+  notify: restart-munin-node
+  when: munin_node_type in ['agent', 'master-agent']
+
+- name: Node | Start 'munin-node' service
+  service:
+    name: munin-node
+    enabled: true
+    state: started
+  when: munin_node_type in ['agent', 'master-agent']

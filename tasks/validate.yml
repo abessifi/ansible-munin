@@ -1,0 +1,9 @@
+---
+
+- fail:
+    msg: "The node type is not correct"
+  when: munin_node_type not in [ 'master', 'agent', 'master-agent' ]
+
+- fail:
+    msg: "You are installing a munin node. The Munin master ip address is required."
+  when: munin_node_type == 'agent' and munin_master_ip_addr is not defined
