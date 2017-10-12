@@ -74,6 +74,11 @@ None.
       roles:
         - geerlingguy.munin
 
+## TODO
+
+- Auto generate hosts configuration file in the munin-master side.
+- Add templates of custom html graph for metrics aggregation.
+
 ## License
 
 MIT / BSD
