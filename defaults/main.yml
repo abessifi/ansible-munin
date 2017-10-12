@@ -22,7 +22,7 @@ munin_log_dir: /var/log/munin
 munin_run_dir: /var/run/munin
 munin_include_dir: /etc/munin/conf.d
 
-munin_html_strategy: cgi
+munin_html_strategy: html
 munin_graph_strategy: cgi
 
 munin_activate_cronjob: true
